@@ -111,8 +111,7 @@ Requests are cached by a **SHA-256 hash** of the request parameters (model, mess
 createCachedClient(client, {
   ttl: '1h',
   storage: 'memory',
-  // optional:
-  storageOptions: { maxSize: 500 }, // max entries, evicts oldest (LRU)
+  maxSize: 500, // max entries, evicts oldest (LRU), default: 1000
 })
 ```
 
@@ -121,7 +120,7 @@ createCachedClient(client, {
 ```ts
 createCachedClient(client, {
   storage: 'file',
-  storageOptions: { path: './llm-cache.json' },
+  storagePath: './llm-cache.json',
 })
 ```
 
@@ -170,7 +169,7 @@ If the storage backend is unavailable, you can choose to fall through to the LLM
 ```ts
 createCachedClient(client, {
   storage: new RedisStorage({ client }),
-  onStorageError: 'passthrough', // default: 'throw'
+  onStorageError: 'throw', // default: 'passthrough'
 })
 ```
 
@@ -198,10 +197,11 @@ createCachedClient(client, {
 
 ```ts
 import OpenAI from 'openai'
-import { OpenAIEmbedder } from 'llm-cache'
+import Redis from 'ioredis'
+import { OpenAIEmbedder, RedisStorage } from 'llm-cache'
 
 createCachedClient(client, {
-  storage: 'redis',
+  storage: new RedisStorage({ client: new Redis() }),
   semantic: {
     embedder: new OpenAIEmbedder({ client: new OpenAI() }),
     threshold: 0.95,
@@ -261,14 +261,15 @@ app.post('/chat', async (c) => {
 ```ts
 // app.module.ts
 import { Module } from '@nestjs/common'
+import Redis from 'ioredis'
 import { LlmCacheModule } from 'llm-cache/nestjs'
+import { RedisStorage } from 'llm-cache'
 
 @Module({
   imports: [
     LlmCacheModule.forRoot({
       ttl: '24h',
-      storage: 'redis',
-      storageOptions: { client: redisClient },
+      storage: new RedisStorage({ client: new Redis() }),
       onStorageError: 'passthrough',
     }),
   ],
@@ -368,9 +369,10 @@ Same as above but for Anthropic's `messages.create`.
 | Option | Type | Default | Description |
 |---|---|---|---|
 | `ttl` | `string \| number` | `undefined` | Time-to-live. String: `"24h"`, `"30m"`, `"7d"`, `"500ms"`. Number: milliseconds. |
-| `storage` | `'memory' \| 'file' \| 'sqlite' \| IStorage` | `'memory'` | Storage backend. |
-| `storageOptions` | `object` | `{}` | Options passed to the built-in storage constructor. |
-| `onStorageError` | `'throw' \| 'passthrough'` | `'throw'` | Behaviour when storage read/write fails. |
+| `storage` | `'memory' \| 'file' \| 'sqlite' \| IStorage` | `'memory'` | Storage backend. Pass an `IStorage` instance for Redis/DynamoDB. |
+| `storagePath` | `string` | see below | File path for `'file'` (default `./llm-cache.json`) or `'sqlite'` (default `./llm-cache.db`). |
+| `maxSize` | `number` | `1000` | Max entries for `'memory'` storage. |
+| `onStorageError` | `'throw' \| 'passthrough'` | `'passthrough'` | Behaviour when storage read/write fails. |
 | `semantic` | `SemanticOptions` | `undefined` | Enable semantic matching. |
 
 ### `SemanticOptions`

@@ -54,6 +54,16 @@
   ],
   "type": "module",
   "license": "MIT",
+  "author": "Yaroslav Solodovnikov",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yar-solodovnikov/llm-cache.git"
+  },
+  "homepage": "https://yar-solodovnikov.github.io/llm-cache/",
+  "engines": {
+    "node": ">=18"
+  },
+  "sideEffects": false,
   "devDependencies": {
     "@anthropic-ai/sdk": "^0.96.0",
     "@aws-sdk/client-dynamodb": "^3.1046.0",

@@ -41,10 +41,11 @@ Uses `text-embedding-3-small` — 1536 dimensions. Requires an OpenAI API key; e
 
 ```ts
 import OpenAI from 'openai'
-import { OpenAIEmbedder } from 'llm-cache'
+import { OpenAIEmbedder, RedisStorage } from 'llm-cache'
+import Redis from 'ioredis'
 
 createCachedClient(client, {
-  storage: 'redis',
+  storage: new RedisStorage({ client: new Redis() }),
   semantic: {
     embedder: new OpenAIEmbedder({ client: new OpenAI() }),
     threshold: 0.95,

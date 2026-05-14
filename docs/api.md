@@ -25,9 +25,10 @@ const anthropic = createCachedAnthropicClient(new Anthropic(), { ttl: '24h' })
 | Option | Type | Default | Description |
 |---|---|---|---|
 | `ttl` | `string \| number` | `undefined` | Time-to-live. String: `"24h"`, `"30m"`, `"7d"`, `"500ms"`. Number: milliseconds. No TTL means entries never expire. |
-| `storage` | `'memory' \| 'file' \| 'sqlite' \| IStorage` | `'memory'` | Storage backend. Pass a string for built-in backends or a custom `IStorage` instance. |
-| `storageOptions` | `object` | `{}` | Options forwarded to the built-in storage constructor. |
-| `onStorageError` | `'throw' \| 'passthrough'` | `'throw'` | What to do when storage read/write fails. `'passthrough'` falls through to the LLM. |
+| `storage` | `'memory' \| 'file' \| 'sqlite' \| IStorage` | `'memory'` | Storage backend. `'file'` and `'sqlite'` use `storagePath` for the file location. Pass an `IStorage` instance for Redis/DynamoDB. |
+| `storagePath` | `string` | see below | Path used when `storage` is `'file'` (default `./llm-cache.json`) or `'sqlite'` (default `./llm-cache.db`). |
+| `maxSize` | `number` | `1000` | Max entries for `'memory'` storage. Ignored for other backends. |
+| `onStorageError` | `'throw' \| 'passthrough'` | `'passthrough'` | What to do when storage read/write fails. `'passthrough'` falls through to the LLM silently. |
 | `semantic` | `SemanticOptions` | `undefined` | Enable semantic (vector) matching. |
 
 ## `SemanticOptions`

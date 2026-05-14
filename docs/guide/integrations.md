@@ -57,14 +57,15 @@ npm install @nestjs/common @nestjs/core reflect-metadata
 ```ts
 // app.module.ts
 import { Module } from '@nestjs/common'
+import Redis from 'ioredis'
 import { LlmCacheModule } from 'llm-cache/nestjs'
+import { RedisStorage } from 'llm-cache'
 
 @Module({
   imports: [
     LlmCacheModule.forRoot({
       ttl: '24h',
-      storage: 'redis',
-      storageOptions: { client: redisClient },
+      storage: new RedisStorage({ client: new Redis() }),
       onStorageError: 'passthrough',
     }),
   ],

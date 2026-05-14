@@ -2,6 +2,7 @@
 import { existsSync, readFileSync } from 'fs'
 
 const DEFAULT_STORAGE_TYPE = 'sqlite'
+const SQLITE_TABLE_NAME = 'llm_cache'
 const DEFAULT_SQLITE_PATH = './llm-cache.db'
 const DEFAULT_FILE_PATH = './llm-cache.json'
 const DEFAULT_LIST_LIMIT = 20
@@ -54,9 +55,9 @@ function getSQLiteStats(path: string): { total: number; expired: number } {
   // eslint-disable-next-line @typescript-eslint/no-require-imports
   const Database = require('better-sqlite3') as typeof import('better-sqlite3')
   const db = new Database(path, { readonly: true })
-  const total = (db.prepare('SELECT COUNT(*) as n FROM llm_cache').get() as { n: number }).n
+  const total = (db.prepare(`SELECT COUNT(*) as n FROM ${SQLITE_TABLE_NAME}`).get() as { n: number }).n
   const expired = (db.prepare(
-    'SELECT COUNT(*) as n FROM llm_cache WHERE expires_at IS NOT NULL AND expires_at < ?',
+    `SELECT COUNT(*) as n FROM ${SQLITE_TABLE_NAME} WHERE expires_at IS NOT NULL AND expires_at < ?`,
   ).get(Date.now()) as { n: number }).n
   db.close()
   return { total, expired }
@@ -109,14 +110,13 @@ async function main() {
 
   if (command === 'list') {
     const limit = parseInt(args['limit'] ?? String(DEFAULT_LIST_LIMIT), 10)
-    const storage = await getStorage(storageType, storagePath)
     // list is not on IStorage interface — read directly
     let keys: string[] = []
     if (storageType === 'sqlite') {
       // eslint-disable-next-line @typescript-eslint/no-require-imports
       const Database = require('better-sqlite3') as typeof import('better-sqlite3')
       const db = new Database(storagePath, { readonly: true })
-      keys = (db.prepare(`SELECT key FROM llm_cache LIMIT ?`).all(limit) as { key: string }[]).map(r => r.key)
+      keys = (db.prepare(`SELECT key FROM ${SQLITE_TABLE_NAME} LIMIT ?`).all(limit) as { key: string }[]).map(r => r.key)
       db.close()
     } else {
       if (existsSync(storagePath)) {
@@ -134,7 +134,6 @@ async function main() {
     console.log(`\nCached entries (${keys.length}):`)
     keys.forEach((k, i) => console.log(`  ${i + 1}. ${k}`))
     console.log()
-    void storage
     return
   }
 

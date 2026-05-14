@@ -3,7 +3,8 @@ import type { StorageErrorStrategy, SemanticOptions } from '../core/CacheManager
 
 export interface LlmCacheOptions {
   ttl?: string | number
-  storage?: 'memory' | IStorage
+  storage?: 'memory' | 'file' | 'sqlite' | IStorage
+  storagePath?: string
   maxSize?: number
   onStorageError?: StorageErrorStrategy
   semantic?: SemanticOptions

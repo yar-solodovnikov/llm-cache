@@ -9,10 +9,17 @@ Built-in, no extra packages needed. Uses an LRU Map — oldest entries are evict
 ```ts
 createCachedClient(client, {
   storage: 'memory',
-  storageOptions: {
-    maxSize: 500,             // default: 1000
-    sweepIntervalMs: 30_000,  // default: 60 000
-  },
+  maxSize: 500,  // default: 1000
+})
+```
+
+To configure `sweepIntervalMs`, instantiate directly:
+
+```ts
+import { MemoryStorage } from 'llm-cache'
+
+createCachedClient(client, {
+  storage: new MemoryStorage({ maxSize: 500, sweepIntervalMs: 30_000 }),
 })
 ```
 
@@ -25,7 +32,7 @@ Stores entries as a JSON file. Reads and writes on every access — not suitable
 ```ts
 createCachedClient(client, {
   storage: 'file',
-  storageOptions: { path: './llm-cache.json' },
+  storagePath: './llm-cache.json',
 })
 ```
 
@@ -124,7 +131,7 @@ If the storage backend is unavailable, you can fall through to the LLM API inste
 ```ts
 createCachedClient(client, {
   storage: new RedisStorage({ client }),
-  onStorageError: 'passthrough', // default: 'throw'
+  onStorageError: 'throw', // default: 'passthrough'
 })
 ```
 

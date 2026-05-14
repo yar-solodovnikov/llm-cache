@@ -3,6 +3,7 @@ export type IndexType = 'flat' | 'hnsw'
 const DEFAULT_DIMENSIONS = 384
 const DEFAULT_MAX_ELEMENTS = 100_000
 const HNSW_TOP_K = 1
+const HNSW_SPACE = 'cosine'
 
 export interface SimilarityEngineOptions {
   threshold: number
@@ -50,7 +51,7 @@ export class SimilarityEngine {
     if (this.hnswIndex) return this.hnswIndex
     // eslint-disable-next-line @typescript-eslint/no-require-imports
     const { HierarchicalNSW } = require('hnswlib-node') as typeof import('hnswlib-node')
-    this.hnswIndex = new HierarchicalNSW('cosine', this.dimensions)
+    this.hnswIndex = new HierarchicalNSW(HNSW_SPACE, this.dimensions)
     this.hnswIndex.initIndex(this.maxElements)
     return this.hnswIndex
   }

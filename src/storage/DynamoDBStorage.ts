@@ -95,23 +95,28 @@ export class DynamoDBStorage implements IStorage {
   }
 
   async clear(): Promise<void> {
-    const result = await this.client.send(new this.cmds.ScanCommand({
-      TableName: this.table,
-      ProjectionExpression: '#k',
-      ExpressionAttributeNames: { '#k': this.keyAttr },
-    }))
+    let lastKey: Record<string, AttributeValue> | undefined
 
-    const items = result.Items ?? []
-    if (items.length === 0) return
-
-    // DynamoDB BatchWrite limit is 25 items per request
-    for (let i = 0; i < items.length; i += DYNAMODB_BATCH_WRITE_LIMIT) {
-      const batch = items.slice(i, i + DYNAMODB_BATCH_WRITE_LIMIT).map(item => ({
-        DeleteRequest: { Key: { [this.keyAttr]: item[this.keyAttr] } },
+    do {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const result: any = await this.client.send(new this.cmds.ScanCommand({
+        TableName: this.table,
+        ProjectionExpression: '#k',
+        ExpressionAttributeNames: { '#k': this.keyAttr },
+        ExclusiveStartKey: lastKey,
       }))
-      await this.client.send(
-        new this.cmds.BatchWriteItemCommand({ RequestItems: { [this.table]: batch } }),
-      )
-    }
+
+      const items: Record<string, AttributeValue>[] = result.Items ?? []
+      for (let i = 0; i < items.length; i += DYNAMODB_BATCH_WRITE_LIMIT) {
+        const batch = items.slice(i, i + DYNAMODB_BATCH_WRITE_LIMIT).map(item => ({
+          DeleteRequest: { Key: { [this.keyAttr]: item[this.keyAttr] } },
+        }))
+        await this.client.send(
+          new this.cmds.BatchWriteItemCommand({ RequestItems: { [this.table]: batch } }),
+        )
+      }
+
+      lastKey = result.LastEvaluatedKey as Record<string, AttributeValue> | undefined
+    } while (lastKey !== undefined)
   }
 }
