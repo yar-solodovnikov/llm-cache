@@ -1,5 +1,6 @@
 import type { Context, Next } from 'hono'
-import { createCachedClient } from '../adapters/openai'
+import { createCachedClientFromManager } from '../adapters/openai'
+import { buildManager } from '../adapters/shared'
 import type { LlmCacheOptions } from '../adapters/base'
 
 type WithCache = <T extends object>(client: T) => T
@@ -23,8 +24,9 @@ declare module 'hono' {
  * })
  */
 export function llmCacheMiddleware(options: LlmCacheOptions = {}) {
+  const manager = buildManager(options)
   return async (c: Context, next: Next): Promise<void> => {
-    c.set('withCache', <T extends object>(client: T) => createCachedClient(client, options))
+    c.set('withCache', <T extends object>(client: T) => createCachedClientFromManager(client, manager))
     await next()
   }
 }

@@ -1,5 +1,6 @@
 import type { Request, Response, NextFunction } from 'express'
-import { createCachedClient } from '../adapters/openai'
+import { createCachedClientFromManager } from '../adapters/openai'
+import { buildManager } from '../adapters/shared'
 import type { LlmCacheOptions } from '../adapters/base'
 
 declare global {
@@ -24,8 +25,9 @@ declare global {
  * })
  */
 export function llmCacheMiddleware(options: LlmCacheOptions = {}) {
+  const manager = buildManager(options)
   return (_req: Request, _res: Response, next: NextFunction): void => {
-    _req.withCache = <T extends object>(client: T) => createCachedClient(client, options)
+    _req.withCache = <T extends object>(client: T) => createCachedClientFromManager(client, manager)
     next()
   }
 }

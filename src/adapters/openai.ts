@@ -1,9 +1,12 @@
 import { buildManager, buildCachedCreate } from './shared'
+import type { CacheManager } from '../core/CacheManager'
 import type { LlmCacheOptions } from './base'
 
 export function createCachedClient<T extends object>(client: T, options: LlmCacheOptions = {}): T {
-  const manager = buildManager(options)
+  return createCachedClientFromManager(client, buildManager(options))
+}
 
+export function createCachedClientFromManager<T extends object>(client: T, manager: CacheManager): T {
   return new Proxy(client, {
     get(target, prop, receiver) {
       if (prop !== 'chat') return Reflect.get(target, prop, receiver)

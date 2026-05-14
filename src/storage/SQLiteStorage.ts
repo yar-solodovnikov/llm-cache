@@ -24,7 +24,7 @@ export class SQLiteStorage implements IStorage {
     }
     const tableName = opts.tableName ?? DEFAULT_TABLE_NAME
     if (!/^\w+$/.test(tableName)) throw new Error(`Invalid tableName: "${tableName}". Use only letters, digits, and underscores.`)
-    this.table = tableName
+    this.table = `"${tableName}"` // quoted identifier — safe in SQL even if validation is bypassed
     this.init()
   }
 
