@@ -1,0 +1,157 @@
+# API Reference
+
+## `createCachedClient(client, options?)`
+
+Wraps any OpenAI-compatible client with caching via JavaScript `Proxy`. Returns a value with the same TypeScript type as the original client.
+
+```ts
+import { createCachedClient } from 'llm-cache'
+
+const openai = createCachedClient(new OpenAI(), { ttl: '24h' })
+```
+
+## `createCachedAnthropicClient(client, options?)`
+
+Same as `createCachedClient` but intercepts `client.messages.create`.
+
+```ts
+import { createCachedAnthropicClient } from 'llm-cache'
+
+const anthropic = createCachedAnthropicClient(new Anthropic(), { ttl: '24h' })
+```
+
+## `LlmCacheOptions`
+
+| Option | Type | Default | Description |
+|---|---|---|---|
+| `ttl` | `string \| number` | `undefined` | Time-to-live. String: `"24h"`, `"30m"`, `"7d"`, `"500ms"`. Number: milliseconds. No TTL means entries never expire. |
+| `storage` | `'memory' \| 'file' \| 'sqlite' \| IStorage` | `'memory'` | Storage backend. Pass a string for built-in backends or a custom `IStorage` instance. |
+| `storageOptions` | `object` | `{}` | Options forwarded to the built-in storage constructor. |
+| `onStorageError` | `'throw' \| 'passthrough'` | `'throw'` | What to do when storage read/write fails. `'passthrough'` falls through to the LLM. |
+| `semantic` | `SemanticOptions` | `undefined` | Enable semantic (vector) matching. |
+
+## `SemanticOptions`
+
+| Option | Type | Default | Description |
+|---|---|---|---|
+| `embedder` | `IEmbedder` | required | The embedding model to use. |
+| `threshold` | `number` | `0.92` | Minimum cosine similarity (0–1) to count as a hit. |
+| `indexType` | `'flat' \| 'hnsw'` | `'flat'` | Search index. Use `'hnsw'` for 10k+ entries. |
+
+## Storage classes
+
+### `MemoryStorage`
+
+```ts
+new MemoryStorage({ maxSize?: number, sweepIntervalMs?: number })
+```
+
+| Option | Default | Description |
+|---|---|---|
+| `maxSize` | `1000` | Max entries. Oldest entry is evicted when full (LRU). |
+| `sweepIntervalMs` | `60000` | How often to run expired-entry cleanup (ms). |
+
+### `FileStorage`
+
+```ts
+new FileStorage({ path: string })
+```
+
+### `RedisStorage`
+
+```ts
+new RedisStorage({ client?: Redis, url?: string, options?: RedisOptions, keyPrefix?: string })
+```
+
+| Option | Default | Description |
+|---|---|---|
+| `keyPrefix` | `'llm-cache:'` | Prefix applied to every Redis key. |
+
+### `SQLiteStorage`
+
+```ts
+new SQLiteStorage({ path?: string, db?: Database, tableName?: string })
+```
+
+| Option | Default | Description |
+|---|---|---|
+| `path` | `'llm-cache.db'` | Path to the SQLite file. |
+| `tableName` | `'llm_cache'` | Table name used inside the database. |
+
+### `DynamoDBStorage`
+
+```ts
+new DynamoDBStorage({
+  tableName: string,
+  region?: string,
+  client?: DynamoDBClient,
+  config?: DynamoDBClientConfig,
+  keyAttribute?: string,
+  valueAttribute?: string,
+  ttlAttribute?: string,
+})
+```
+
+| Option | Default | Description |
+|---|---|---|
+| `keyAttribute` | `'pk'` | Partition key attribute name. |
+| `valueAttribute` | `'value'` | Attribute used to store the serialized entry. |
+| `ttlAttribute` | `'ttl'` | Attribute used for DynamoDB native TTL. |
+
+## Embedders
+
+### `LocalEmbedder`
+
+```ts
+new LocalEmbedder({ model?: string })
+```
+
+| Option | Default | Description |
+|---|---|---|
+| `model` | `'Xenova/all-MiniLM-L6-v2'` | HuggingFace model ID. |
+
+`dimensions`: `384`
+
+### `OpenAIEmbedder`
+
+```ts
+new OpenAIEmbedder({ client: OpenAI, model?: string, dimensions?: number })
+```
+
+| Option | Default | Description |
+|---|---|---|
+| `model` | `'text-embedding-3-small'` | OpenAI embedding model. |
+| `dimensions` | `1536` | Output dimensions. |
+
+## `IStorage` interface
+
+```ts
+interface IStorage {
+  get(key: string): Promise<CacheEntry | null>
+  set(key: string, entry: CacheEntry): Promise<void>
+  delete(key: string): Promise<void>
+  clear(): Promise<void>
+}
+```
+
+## `CacheEntry`
+
+```ts
+interface CacheEntry {
+  key: string
+  type: 'full' | 'stream'
+  value: unknown
+  chunks?: unknown[]
+  createdAt: number   // ms timestamp
+  expiresAt: number | null
+}
+```
+
+## `IEmbedder` interface
+
+```ts
+interface IEmbedder {
+  readonly dimensions: number
+  embed(text: string): Promise<number[]>
+}
+```
