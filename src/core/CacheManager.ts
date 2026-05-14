@@ -53,7 +53,12 @@ export class CacheManager {
       if (text && this.embedder && this.similarity) {
         const embedding = await this.embedder.embed(text)
         const similarKey = this.similarity.findSimilar(embedding)
-        if (similarKey) return await this.storage.get(similarKey)
+        if (similarKey) {
+          const result = await this.storage.get(similarKey)
+          // storage returned null → entry expired; remove stale embedding from index
+          if (!result) this.similarity.remove(similarKey)
+          return result
+        }
       }
 
       return null
