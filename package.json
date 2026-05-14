@@ -34,12 +34,15 @@
   "type": "module",
   "license": "MIT",
   "devDependencies": {
+    "@anthropic-ai/sdk": "^0.96.0",
     "@aws-sdk/client-dynamodb": "^3.1046.0",
     "@eslint/js": "^9.0.0",
+    "@huggingface/transformers": "^4.2.0",
     "@types/better-sqlite3": "^7.6.13",
     "@types/node": "^22.0.0",
     "better-sqlite3": "^12.10.0",
     "eslint": "^9.0.0",
+    "hnswlib-node": "^3.0.0",
     "ioredis": "^5.10.1",
     "tsup": "^8.0.0",
     "typescript": "^5.0.0",
@@ -48,14 +51,20 @@
   },
   "peerDependencies": {
     "openai": ">=4.0.0",
+    "@anthropic-ai/sdk": ">=0.20.0",
     "ioredis": ">=5.0.0",
     "better-sqlite3": ">=9.0.0",
-    "@aws-sdk/client-dynamodb": ">=3.0.0"
+    "@aws-sdk/client-dynamodb": ">=3.0.0",
+    "@huggingface/transformers": ">=3.0.0",
+    "hnswlib-node": ">=3.0.0"
   },
   "peerDependenciesMeta": {
     "openai": { "optional": true },
+    "@anthropic-ai/sdk": { "optional": true },
     "ioredis": { "optional": true },
     "better-sqlite3": { "optional": true },
-    "@aws-sdk/client-dynamodb": { "optional": true }
+    "@aws-sdk/client-dynamodb": { "optional": true },
+    "@huggingface/transformers": { "optional": true },
+    "hnswlib-node": { "optional": true }
   }
 }

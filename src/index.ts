@@ -1,4 +1,5 @@
 export { createCachedClient } from './adapters/openai'
+export { createCachedAnthropicClient } from './adapters/anthropic'
 export type { LlmCacheOptions } from './adapters/base'
 
 export { MemoryStorage } from './storage/MemoryStorage'
@@ -14,4 +15,12 @@ export type { SQLiteStorageOptions } from './storage/SQLiteStorage'
 export type { DynamoDBStorageOptions } from './storage/DynamoDBStorage'
 
 export { CacheManager } from './core/CacheManager'
-export type { CacheManagerOptions, StorageErrorStrategy } from './core/CacheManager'
+export type { CacheManagerOptions, StorageErrorStrategy, SemanticOptions } from './core/CacheManager'
+export { SimilarityEngine } from './core/SimilarityEngine'
+export type { SimilarityEngineOptions, IndexType } from './core/SimilarityEngine'
+
+export { LocalEmbedder } from './embeddings/LocalEmbedder'
+export { OpenAIEmbedder } from './embeddings/OpenAIEmbedder'
+export type { IEmbedder } from './embeddings/IEmbedder'
+export type { LocalEmbedderOptions } from './embeddings/LocalEmbedder'
+export type { OpenAIEmbedderOptions } from './embeddings/OpenAIEmbedder'
