@@ -14,6 +14,7 @@ Cache LLM responses with **exact** and **semantic** matching. Works with OpenAI,
   - [Hono](#hono)
   - [NestJS](#nestjs)
 - [CLI](#cli)
+- [Examples](#examples)
 - [API Reference](#api-reference)
 - [Configuration](#configuration)
 
@@ -328,6 +329,26 @@ npx llm-cache list --storage file --path ./llm-cache.json --limit 10
 
 # Clear SQLite cache
 npx llm-cache clear --storage sqlite --path ./llm-cache.db
+```
+
+---
+
+## Examples
+
+Runnable examples are in the [`examples/`](examples/) folder. Requires `OPENAI_API_KEY`.
+
+| File | What it shows |
+|---|---|
+| [`basic.ts`](examples/basic.ts) | Memory cache — first call vs cached call, timing comparison |
+| [`streaming.ts`](examples/streaming.ts) | Streaming request on first call, chunk replay from cache on second |
+| [`with-redis.ts`](examples/with-redis.ts) | Redis storage with `onStorageError: 'passthrough'` |
+| [`semantic.ts`](examples/semantic.ts) | Local embedder — different phrasings hit the same cache entry |
+
+```bash
+npx tsx examples/basic.ts
+npx tsx examples/streaming.ts
+npx tsx examples/semantic.ts     # needs: npm install @huggingface/transformers
+npx tsx examples/with-redis.ts   # needs: Redis on localhost:6379
 ```
 
 ---

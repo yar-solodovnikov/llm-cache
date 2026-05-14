@@ -70,6 +70,20 @@ Every request is cached by a **SHA-256 hash** of the parameters (model, messages
 - **Cache miss** — request goes to the API, response is stored, then returned.
 - **Streaming** — chunks are accumulated and stored, then replayed as `AsyncGenerator` on cache hits.
 
+## Running the examples
+
+The repository includes runnable examples in the [`examples/`](https://github.com/yar-solodovnikov/llm-cache/tree/main/examples) folder. Requires `OPENAI_API_KEY`.
+
+```bash
+git clone https://github.com/yar-solodovnikov/llm-cache
+cd llm-cache && npm install
+
+npx tsx examples/basic.ts       # memory cache, timing comparison
+npx tsx examples/streaming.ts   # streaming + cache replay
+npx tsx examples/with-redis.ts  # Redis storage
+npx tsx examples/semantic.ts    # semantic matching with local embedder
+```
+
 ## TTL format
 
 | Value | Meaning |
