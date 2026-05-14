@@ -18,6 +18,9 @@ export interface CacheManagerOptions {
   semantic?: SemanticOptions
 }
 
+const DEFAULT_SEMANTIC_THRESHOLD = 0.92
+const DEFAULT_INDEX_TYPE: IndexType = 'flat'
+
 export class CacheManager {
   private storage: IStorage
   private ttlMs: number | null
@@ -33,8 +36,8 @@ export class CacheManager {
     if (options.semantic) {
       this.embedder = options.semantic.embedder
       this.similarity = new SimilarityEngine({
-        threshold: options.semantic.threshold ?? 0.92,
-        indexType: options.semantic.indexType ?? 'flat',
+        threshold: options.semantic.threshold ?? DEFAULT_SEMANTIC_THRESHOLD,
+        indexType: options.semantic.indexType ?? DEFAULT_INDEX_TYPE,
         dimensions: options.semantic.embedder.dimensions,
       })
     }

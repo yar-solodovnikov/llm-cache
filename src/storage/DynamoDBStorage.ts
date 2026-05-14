@@ -28,6 +28,11 @@ export interface DynamoDBStorageOptions {
   ttlAttribute?: string
 }
 
+const DEFAULT_KEY_ATTRIBUTE = 'pk'
+const DEFAULT_VALUE_ATTRIBUTE = 'value'
+const DEFAULT_TTL_ATTRIBUTE = 'ttl'
+const DYNAMODB_BATCH_WRITE_LIMIT = 25
+
 export class DynamoDBStorage implements IStorage {
   private client: DynamoDBClient
   private cmds: DynamoCommands
@@ -42,9 +47,9 @@ export class DynamoDBStorage implements IStorage {
     this.cmds = sdk
     this.client = opts.client ?? new sdk.DynamoDBClient({ region: opts.region, ...opts.config })
     this.table = opts.tableName
-    this.keyAttr = opts.keyAttribute ?? 'pk'
-    this.valueAttr = opts.valueAttribute ?? 'value'
-    this.ttlAttr = opts.ttlAttribute ?? 'ttl'
+    this.keyAttr = opts.keyAttribute ?? DEFAULT_KEY_ATTRIBUTE
+    this.valueAttr = opts.valueAttribute ?? DEFAULT_VALUE_ATTRIBUTE
+    this.ttlAttr = opts.ttlAttribute ?? DEFAULT_TTL_ATTRIBUTE
   }
 
   async get(key: string): Promise<CacheEntry | null> {
@@ -100,8 +105,8 @@ export class DynamoDBStorage implements IStorage {
     if (items.length === 0) return
 
     // DynamoDB BatchWrite limit is 25 items per request
-    for (let i = 0; i < items.length; i += 25) {
-      const batch = items.slice(i, i + 25).map(item => ({
+    for (let i = 0; i < items.length; i += DYNAMODB_BATCH_WRITE_LIMIT) {
+      const batch = items.slice(i, i + DYNAMODB_BATCH_WRITE_LIMIT).map(item => ({
         DeleteRequest: { Key: { [this.keyAttr]: item[this.keyAttr] } },
       }))
       await this.client.send(

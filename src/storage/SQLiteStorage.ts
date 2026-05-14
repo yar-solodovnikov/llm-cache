@@ -7,6 +7,9 @@ export interface SQLiteStorageOptions {
   tableName?: string
 }
 
+const DEFAULT_DB_PATH = 'llm-cache.db'
+const DEFAULT_TABLE_NAME = 'llm_cache'
+
 export class SQLiteStorage implements IStorage {
   private db: Database
   private readonly table: string
@@ -17,9 +20,9 @@ export class SQLiteStorage implements IStorage {
     } else {
       // eslint-disable-next-line @typescript-eslint/no-require-imports
       const BetterSqlite3 = require('better-sqlite3') as typeof import('better-sqlite3')
-      this.db = new BetterSqlite3(opts.path ?? 'llm-cache.db')
+      this.db = new BetterSqlite3(opts.path ?? DEFAULT_DB_PATH)
     }
-    this.table = opts.tableName ?? 'llm_cache'
+    this.table = opts.tableName ?? DEFAULT_TABLE_NAME
     this.init()
   }
 

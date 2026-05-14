@@ -1,5 +1,9 @@
 export type IndexType = 'flat' | 'hnsw'
 
+const DEFAULT_DIMENSIONS = 384
+const DEFAULT_MAX_ELEMENTS = 100_000
+const HNSW_TOP_K = 1
+
 export interface SimilarityEngineOptions {
   threshold: number
   indexType?: IndexType
@@ -37,8 +41,8 @@ export class SimilarityEngine {
   constructor(opts: SimilarityEngineOptions) {
     this.threshold = opts.threshold
     this.indexType = opts.indexType ?? 'flat'
-    this.dimensions = opts.dimensions ?? 384
-    this.maxElements = opts.maxElements ?? 100_000
+    this.dimensions = opts.dimensions ?? DEFAULT_DIMENSIONS
+    this.maxElements = opts.maxElements ?? DEFAULT_MAX_ELEMENTS
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -99,7 +103,7 @@ export class SimilarityEngine {
 
   private findHnsw(queryEmbedding: number[]): string | null {
     if (this.nextLabel === 0) return null
-    const result = this.getHnsw().searchKnn(queryEmbedding, 1)
+    const result = this.getHnsw().searchKnn(queryEmbedding, HNSW_TOP_K)
     const label = result.neighbors[0]
     // HNSW cosine distance = 1 - similarity
     const similarity = 1 - result.distances[0]

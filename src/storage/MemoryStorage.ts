@@ -5,14 +5,17 @@ export interface MemoryStorageOptions {
   sweepIntervalMs?: number
 }
 
+const DEFAULT_MAX_SIZE = 1000
+const DEFAULT_SWEEP_INTERVAL_MS = 60_000
+
 export class MemoryStorage implements IStorage {
   private store = new Map<string, CacheEntry>()
   private readonly maxSize: number
   private sweepTimer: ReturnType<typeof setInterval> | null = null
 
   constructor(options: MemoryStorageOptions = {}) {
-    this.maxSize = options.maxSize ?? 1000
-    const interval = options.sweepIntervalMs ?? 60_000
+    this.maxSize = options.maxSize ?? DEFAULT_MAX_SIZE
+    const interval = options.sweepIntervalMs ?? DEFAULT_SWEEP_INTERVAL_MS
     this.sweepTimer = setInterval(() => this.sweep(), interval)
     // don't keep the process alive just for sweep
     this.sweepTimer.unref?.()

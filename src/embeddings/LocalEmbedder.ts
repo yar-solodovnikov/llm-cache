@@ -2,13 +2,14 @@ import type { IEmbedder } from './IEmbedder'
 
 // all-MiniLM-L6-v2 — 384 dims, ~25MB, no API key needed
 const DEFAULT_MODEL = 'Xenova/all-MiniLM-L6-v2'
+const DEFAULT_DIMENSIONS = 384
 
 export interface LocalEmbedderOptions {
   model?: string
 }
 
 export class LocalEmbedder implements IEmbedder {
-  readonly dimensions = 384
+  readonly dimensions = DEFAULT_DIMENSIONS
   private readonly model: string
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private pipeline: any = null

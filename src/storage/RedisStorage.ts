@@ -8,6 +8,8 @@ export interface RedisStorageOptions {
   keyPrefix?: string
 }
 
+const DEFAULT_KEY_PREFIX = 'llm-cache:'
+
 export class RedisStorage implements IStorage {
   private client: Redis
   private readonly keyPrefix: string
@@ -21,7 +23,7 @@ export class RedisStorage implements IStorage {
       const IORedis = require('ioredis') as typeof import('ioredis').default
       this.client = opts.url ? new IORedis(opts.url, opts.options ?? {}) : new IORedis(opts.options ?? {})
     }
-    this.keyPrefix = opts.keyPrefix ?? 'llm-cache:'
+    this.keyPrefix = opts.keyPrefix ?? DEFAULT_KEY_PREFIX
   }
 
   private prefixed(key: string): string {

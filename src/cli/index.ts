@@ -1,6 +1,11 @@
 #!/usr/bin/env node
 import { existsSync } from 'fs'
 
+const DEFAULT_STORAGE_TYPE = 'sqlite'
+const DEFAULT_SQLITE_PATH = './llm-cache.db'
+const DEFAULT_FILE_PATH = './llm-cache.json'
+const DEFAULT_LIST_LIMIT = 20
+
 const [, , command, ...rawArgs] = process.argv
 
 function parseArgs(args: string[]): Record<string, string> {
@@ -70,8 +75,8 @@ function getFileStats(path: string): { total: number; expired: number } {
 
 async function main() {
   const args = parseArgs(rawArgs)
-  const storageType = args['storage'] ?? 'sqlite'
-  const defaultPath = storageType === 'file' ? './llm-cache.json' : './llm-cache.db'
+  const storageType = args['storage'] ?? DEFAULT_STORAGE_TYPE
+  const defaultPath = storageType === 'file' ? DEFAULT_FILE_PATH : DEFAULT_SQLITE_PATH
   const storagePath = args['path'] ?? defaultPath
 
   if (!command || command === 'help' || command === '--help') {
@@ -100,7 +105,7 @@ async function main() {
   }
 
   if (command === 'list') {
-    const limit = parseInt(args['limit'] ?? '20', 10)
+    const limit = parseInt(args['limit'] ?? String(DEFAULT_LIST_LIMIT), 10)
     const storage = await getStorage(storageType, storagePath)
     // list is not on IStorage interface — read directly
     let keys: string[] = []
