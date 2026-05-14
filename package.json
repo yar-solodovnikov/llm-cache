@@ -5,11 +5,29 @@
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
+  "bin": {
+    "llm-cache": "./dist/cli.cjs"
+  },
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js",
       "require": "./dist/index.cjs"
+    },
+    "./nestjs": {
+      "types": "./dist/nestjs.d.ts",
+      "import": "./dist/nestjs.js",
+      "require": "./dist/nestjs.cjs"
+    },
+    "./express": {
+      "types": "./dist/express.d.ts",
+      "import": "./dist/express.js",
+      "require": "./dist/express.cjs"
+    },
+    "./hono": {
+      "types": "./dist/hono.d.ts",
+      "import": "./dist/hono.js",
+      "require": "./dist/hono.cjs"
     }
   },
   "files": [
@@ -38,33 +56,64 @@
     "@aws-sdk/client-dynamodb": "^3.1046.0",
     "@eslint/js": "^9.0.0",
     "@huggingface/transformers": "^4.2.0",
+    "@nestjs/common": "^11.1.21",
+    "@nestjs/core": "^11.1.21",
     "@types/better-sqlite3": "^7.6.13",
+    "@types/express": "^5.0.6",
     "@types/node": "^22.0.0",
     "better-sqlite3": "^12.10.0",
     "eslint": "^9.0.0",
     "hnswlib-node": "^3.0.0",
+    "hono": "^4.12.18",
     "ioredis": "^5.10.1",
+    "reflect-metadata": "^0.2.2",
     "tsup": "^8.0.0",
     "typescript": "^5.0.0",
     "typescript-eslint": "^8.0.0",
     "vitest": "^2.0.0"
   },
   "peerDependencies": {
-    "openai": ">=4.0.0",
     "@anthropic-ai/sdk": ">=0.20.0",
-    "ioredis": ">=5.0.0",
-    "better-sqlite3": ">=9.0.0",
     "@aws-sdk/client-dynamodb": ">=3.0.0",
     "@huggingface/transformers": ">=3.0.0",
-    "hnswlib-node": ">=3.0.0"
+    "@nestjs/common": ">=10.0.0",
+    "better-sqlite3": ">=9.0.0",
+    "express": ">=4.0.0",
+    "hnswlib-node": ">=3.0.0",
+    "hono": ">=4.0.0",
+    "ioredis": ">=5.0.0",
+    "openai": ">=4.0.0"
   },
   "peerDependenciesMeta": {
-    "openai": { "optional": true },
-    "@anthropic-ai/sdk": { "optional": true },
-    "ioredis": { "optional": true },
-    "better-sqlite3": { "optional": true },
-    "@aws-sdk/client-dynamodb": { "optional": true },
-    "@huggingface/transformers": { "optional": true },
-    "hnswlib-node": { "optional": true }
+    "openai": {
+      "optional": true
+    },
+    "@anthropic-ai/sdk": {
+      "optional": true
+    },
+    "ioredis": {
+      "optional": true
+    },
+    "better-sqlite3": {
+      "optional": true
+    },
+    "@aws-sdk/client-dynamodb": {
+      "optional": true
+    },
+    "@huggingface/transformers": {
+      "optional": true
+    },
+    "hnswlib-node": {
+      "optional": true
+    },
+    "@nestjs/common": {
+      "optional": true
+    },
+    "express": {
+      "optional": true
+    },
+    "hono": {
+      "optional": true
+    }
   }
 }
