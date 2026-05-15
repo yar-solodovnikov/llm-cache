@@ -14,7 +14,7 @@ hero:
       link: /api
     - theme: alt
       text: View on GitHub
-      link: https://github.com/yar-solodovnikov/llm-cache
+      link: https://github.com/yar-solodovnikov/llm-cacher
 
 features:
   - icon: âš¡ï¸
@@ -36,4 +36,5 @@ features:
     title: Streaming support
     details: Accumulates stream chunks, stores them, and replays as AsyncGenerator. Your streaming code doesn't change.
 ---
+
 

@@ -59,9 +59,9 @@
   "author": "Yaroslav Solodovnikov",
   "repository": {
     "type": "git",
-    "url": "https://github.com/yar-solodovnikov/llm-cache.git"
+    "url": "https://github.com/yar-solodovnikov/llm-cacher.git"
   },
-  "homepage": "https://yar-solodovnikov.github.io/llm-cache/",
+  "homepage": "https://yar-solodovnikov.github.io/llm-cacher/",
   "engines": {
     "node": ">=18"
   },

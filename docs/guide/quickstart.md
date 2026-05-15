@@ -72,11 +72,11 @@ Every request is cached by a **SHA-256 hash** of the parameters (model, messages
 
 ## Running the examples
 
-The repository includes runnable examples in the [`examples/`](https://github.com/yar-solodovnikov/llm-cache/tree/main/examples) folder. Requires `OPENAI_API_KEY`.
+The repository includes runnable examples in the [`examples/`](https://github.com/yar-solodovnikov/llm-cacher/tree/main/examples) folder. Requires `OPENAI_API_KEY`.
 
 ```bash
-git clone https://github.com/yar-solodovnikov/llm-cache
-cd llm-cache && npm install
+git clone https://github.com/yar-solodovnikov/llm-cacher
+cd llm-cacher && npm install
 
 npx tsx examples/basic.ts       # memory cache, timing comparison
 npx tsx examples/streaming.ts   # streaming + cache replay
@@ -93,4 +93,6 @@ npx tsx examples/semantic.ts    # semantic matching with local embedder
 | `"24h"` | 24 hours |
 | `"7d"` | 7 days |
 | `60000` | 60 000 ms (number = milliseconds) |
+
+
 

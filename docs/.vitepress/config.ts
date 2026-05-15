@@ -3,13 +3,13 @@
 export default defineConfig({
   title: 'llm-cacher',
   description: 'Cache LLM responses with exact and semantic matching',
-  base: '/llm-cache/',
+  base: '/llm-cacher/',
 
   themeConfig: {
     nav: [
       { text: 'Guide', link: '/guide/quickstart' },
       { text: 'API', link: '/api' },
-      { text: 'GitHub', link: 'https://github.com/yar-solodovnikov/llm-cache' },
+      { text: 'GitHub', link: 'https://github.com/yar-solodovnikov/llm-cacher' },
     ],
 
     sidebar: [
@@ -42,7 +42,7 @@ export default defineConfig({
     ],
 
     socialLinks: [
-      { icon: 'github', link: 'https://github.com/yar-solodovnikov/llm-cache' },
+      { icon: 'github', link: 'https://github.com/yar-solodovnikov/llm-cacher' },
     ],
 
     search: {
@@ -54,4 +54,5 @@ export default defineConfig({
     },
   },
 })
+
 
