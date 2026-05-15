@@ -131,7 +131,7 @@ import { RedisStorage } from 'llm-cache'
 import Redis from 'ioredis'
 
 createCachedClient(client, {
-  storage: new RedisStorage({ client: new Redis(), prefix: 'llm:' }),
+  storage: new RedisStorage({ client: new Redis(), keyPrefix: 'llm:' }),
 })
 ```
 
@@ -160,7 +160,19 @@ createCachedClient(client, {
 })
 ```
 
-DynamoDB table requirements: partition key `key` (String), optional TTL attribute `ttl` (Number). Enable TTL on the `ttl` attribute in the AWS console for automatic expiry.
+DynamoDB table requirements: partition key `pk` (String), optional TTL attribute `ttl` (Number). Enable TTL on the `ttl` attribute in the AWS console for automatic expiry.
+
+To use different attribute names, pass `keyAttribute`, `valueAttribute`, or `ttlAttribute` to the constructor:
+
+```ts
+new DynamoDBStorage({
+  tableName: 'llm-cache',
+  region: 'us-east-1',
+  keyAttribute: 'cacheKey',   // default: 'pk'
+  valueAttribute: 'payload',  // default: 'value'
+  ttlAttribute: 'expiresAt',  // default: 'ttl'
+})
+```
 
 ### Error Handling
 
@@ -380,7 +392,7 @@ Same as above but for Anthropic's `messages.create`.
 | Option | Type | Default | Description |
 |---|---|---|---|
 | `embedder` | `IEmbedder` | required | Embedding model to use. |
-| `threshold` | `number` | `0.9` | Minimum cosine similarity (0–1) to count as a cache hit. |
+| `threshold` | `number` | `0.92` | Minimum cosine similarity (0–1) to count as a cache hit. |
 | `indexType` | `'flat' \| 'hnsw'` | `'flat'` | Search index. Use `'hnsw'` for large caches (10k+ entries). |
 
 ### Storage classes
@@ -392,6 +404,14 @@ Same as above but for Anthropic's `messages.create`.
 | `RedisStorage` | `ioredis` | Redis via ioredis. |
 | `SQLiteStorage` | `better-sqlite3` | SQLite file. |
 | `DynamoDBStorage` | `@aws-sdk/client-dynamodb` | AWS DynamoDB. |
+
+**Resource cleanup:** Call the appropriate method when your process shuts down to release connections and background timers:
+
+```ts
+memoryStorage.destroy()   // stops the expiry sweep timer
+sqliteStorage.close()     // closes the SQLite connection
+await redisStorage.quit() // disconnects from Redis
+```
 
 ### Embedders
 
