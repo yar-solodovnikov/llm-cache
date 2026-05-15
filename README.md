@@ -1,4 +1,9 @@
- llm-cacher
+# llm-cacher
+
+[![npm version](https://img.shields.io/npm/v/llm-cacher.svg)](https://www.npmjs.com/package/llm-cacher)
+[![npm downloads](https://img.shields.io/npm/dm/llm-cacher.svg)](https://www.npmjs.com/package/llm-cacher)
+[![license](https://img.shields.io/npm/l/llm-cacher.svg)](https://github.com/yar-solodovnikov/llm-cache/blob/main/LICENSE)
+[![CI](https://github.com/yar-solodovnikov/llm-cache/actions/workflows/ci.yml/badge.svg)](https://github.com/yar-solodovnikov/llm-cache/actions/workflows/ci.yml)
 
 Cache LLM responses with **exact** and **semantic** matching. Works with OpenAI, Anthropic, and any SDK that follows a similar API shape. Supports in-memory, file, Redis, SQLite, and DynamoDB storage backends.
 

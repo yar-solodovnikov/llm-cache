@@ -1,6 +1,6 @@
 {
   "name": "llm-cacher",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Cache LLM responses — exact and semantic matching",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
@@ -44,12 +44,14 @@
     "docs:preview": "vitepress preview docs"
   },
   "keywords": [
-    "llm",
-    "cache",
-    "openai",
-    "anthropic",
-    "ai",
-    "semantic-cache",
+    "llm", "cache", "caching",
+    "openai", "anthropic", "claude", "gpt",
+    "ai", "ai-cache", "llm-cache",
+    "semantic-cache", "semantic-search",
+    "embeddings", "vector-cache",
+    "prompt-caching", "response-cache",
+    "redis", "sqlite", "dynamodb",
+    "middleware", "typescript", "nodejs",
     "cost-optimization"
   ],
   "type": "module",
