@@ -1,11 +1,11 @@
-# Framework Integrations
+﻿# Framework Integrations
 
 ## Express
 
 ```ts
 import express from 'express'
 import OpenAI from 'openai'
-import { llmCacheMiddleware } from 'llm-cache/express'
+import { llmCacheMiddleware } from 'llm-cacher/express'
 
 const app = express()
 app.use(llmCacheMiddleware({ ttl: '24h', storage: 'memory' }))
@@ -20,14 +20,14 @@ app.post('/chat', async (req, res) => {
 })
 ```
 
-The middleware attaches `req.withCache(client)` to every request. The TypeScript type for `Request` is augmented automatically — no extra imports needed.
+The middleware attaches `req.withCache(client)` to every request. The TypeScript type for `Request` is augmented automatically â€” no extra imports needed.
 
 ## Hono
 
 ```ts
 import { Hono } from 'hono'
 import OpenAI from 'openai'
-import { llmCacheMiddleware } from 'llm-cache/hono'
+import { llmCacheMiddleware } from 'llm-cacher/hono'
 
 const app = new Hono()
 app.use(llmCacheMiddleware({ ttl: '24h', storage: 'sqlite' }))
@@ -42,7 +42,7 @@ app.post('/chat', async (c) => {
 })
 ```
 
-Uses Hono's `ContextVariableMap` augmentation — `c.get('withCache')` is fully typed.
+Uses Hono's `ContextVariableMap` augmentation â€” `c.get('withCache')` is fully typed.
 
 ## NestJS
 
@@ -58,8 +58,8 @@ npm install @nestjs/common @nestjs/core reflect-metadata
 // app.module.ts
 import { Module } from '@nestjs/common'
 import Redis from 'ioredis'
-import { LlmCacheModule } from 'llm-cache/nestjs'
-import { RedisStorage } from 'llm-cache'
+import { LlmCacheModule } from 'llm-cacher/nestjs'
+import { RedisStorage } from 'llm-cacher'
 
 @Module({
   imports: [
@@ -79,7 +79,7 @@ export class AppModule {}
 // chat.service.ts
 import { Injectable } from '@nestjs/common'
 import OpenAI from 'openai'
-import { LlmCacheService, InjectLlmCache } from 'llm-cache/nestjs'
+import { LlmCacheService, InjectLlmCache } from 'llm-cacher/nestjs'
 
 @Injectable()
 export class ChatService {
@@ -96,3 +96,4 @@ export class ChatService {
 ```
 
 `LlmCacheService.wrap(client)` wraps any LLM client with caching using the options from `forRoot`.
+

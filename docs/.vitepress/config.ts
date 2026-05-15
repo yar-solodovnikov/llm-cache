@@ -1,7 +1,7 @@
-import { defineConfig } from 'vitepress'
+﻿import { defineConfig } from 'vitepress'
 
 export default defineConfig({
-  title: 'llm-cache',
+  title: 'llm-cacher',
   description: 'Cache LLM responses with exact and semantic matching',
   base: '/llm-cache/',
 
@@ -54,3 +54,4 @@ export default defineConfig({
     },
   },
 })
+

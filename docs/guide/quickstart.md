@@ -1,22 +1,22 @@
-# Quick Start
+﻿# Quick Start
 
 ## Installation
 
 ```bash
-npm install llm-cache
+npm install llm-cacher
 ```
 
-Install the storage backend you need — all are optional:
+Install the storage backend you need â€” all are optional:
 
 ```bash
 npm install ioredis              # Redis
 npm install better-sqlite3       # SQLite
 npm install @aws-sdk/client-dynamodb  # DynamoDB
 
-# Semantic caching — local model (no API key)
+# Semantic caching â€” local model (no API key)
 npm install @huggingface/transformers hnswlib-node
 
-# Semantic caching — OpenAI embeddings
+# Semantic caching â€” OpenAI embeddings
 npm install openai hnswlib-node
 ```
 
@@ -24,20 +24,20 @@ npm install openai hnswlib-node
 
 ```ts
 import OpenAI from 'openai'
-import { createCachedClient } from 'llm-cache'
+import { createCachedClient } from 'llm-cacher'
 
 const openai = createCachedClient(new OpenAI(), {
   ttl: '24h',
   storage: 'memory',
 })
 
-// First call — hits the API
+// First call â€” hits the API
 const res1 = await openai.chat.completions.create({
   model: 'gpt-4o',
   messages: [{ role: 'user', content: 'What is 2+2?' }],
 })
 
-// Second identical call — served from cache instantly
+// Second identical call â€” served from cache instantly
 const res2 = await openai.chat.completions.create({
   model: 'gpt-4o',
   messages: [{ role: 'user', content: 'What is 2+2?' }],
@@ -48,7 +48,7 @@ const res2 = await openai.chat.completions.create({
 
 ```ts
 import Anthropic from '@anthropic-ai/sdk'
-import { createCachedAnthropicClient } from 'llm-cache'
+import { createCachedAnthropicClient } from 'llm-cacher'
 
 const anthropic = createCachedAnthropicClient(new Anthropic(), {
   ttl: '12h',
@@ -66,9 +66,9 @@ const msg = await anthropic.messages.create({
 
 Every request is cached by a **SHA-256 hash** of the parameters (model, messages, temperature, etc.). The `stream` flag is excluded so streaming and non-streaming calls share the same entry.
 
-- **Cache hit** — response returned immediately, no API call made.
-- **Cache miss** — request goes to the API, response is stored, then returned.
-- **Streaming** — chunks are accumulated and stored, then replayed as `AsyncGenerator` on cache hits.
+- **Cache hit** â€” response returned immediately, no API call made.
+- **Cache miss** â€” request goes to the API, response is stored, then returned.
+- **Streaming** â€” chunks are accumulated and stored, then replayed as `AsyncGenerator` on cache hits.
 
 ## Running the examples
 
@@ -93,3 +93,4 @@ npx tsx examples/semantic.ts    # semantic matching with local embedder
 | `"24h"` | 24 hours |
 | `"7d"` | 7 days |
 | `60000` | 60 000 ms (number = milliseconds) |
+

@@ -1,9 +1,9 @@
-# CLI
+﻿# CLI
 
 The CLI lets you inspect and manage cache files without writing code.
 
 ```bash
-npx llm-cache --help
+npx llm-cacher --help
 ```
 
 ## Commands
@@ -13,9 +13,9 @@ npx llm-cache --help
 Show total, expired, and active entry counts.
 
 ```bash
-npx llm-cache stats
-npx llm-cache stats --storage sqlite --path ./llm-cache.db
-npx llm-cache stats --storage file   --path ./llm-cache.json
+npx llm-cacher stats
+npx llm-cacher stats --storage sqlite --path ./llm-cacher.db
+npx llm-cacher stats --storage file   --path ./llm-cacher.json
 ```
 
 Output:
@@ -23,7 +23,7 @@ Output:
 ```
 Cache Statistics
 ================
-Storage:  sqlite (./llm-cache.db)
+Storage:  sqlite (./llm-cacher.db)
 Entries:  142
 Expired:  3 (not yet cleaned up)
 Active:   139
@@ -34,9 +34,9 @@ Active:   139
 Print the cache keys.
 
 ```bash
-npx llm-cache list
-npx llm-cache list --limit 50
-npx llm-cache list --storage file --path ./llm-cache.json
+npx llm-cacher list
+npx llm-cacher list --limit 50
+npx llm-cacher list --storage file --path ./llm-cacher.json
 ```
 
 ### `clear`
@@ -44,8 +44,8 @@ npx llm-cache list --storage file --path ./llm-cache.json
 Delete all entries.
 
 ```bash
-npx llm-cache clear
-npx llm-cache clear --storage sqlite --path ./my-cache.db
+npx llm-cacher clear
+npx llm-cacher clear --storage sqlite --path ./my-cache.db
 ```
 
 ## Options
@@ -53,5 +53,6 @@ npx llm-cache clear --storage sqlite --path ./my-cache.db
 | Flag | Default | Description |
 |---|---|---|
 | `--storage` | `sqlite` | Storage type: `sqlite` or `file` |
-| `--path` | `./llm-cache.db` / `./llm-cache.json` | Path to the cache file |
+| `--path` | `./llm-cacher.db` / `./llm-cacher.json` | Path to the cache file |
 | `--limit` | `20` | Max entries shown by `list` |
+

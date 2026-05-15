@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, afterEach } from 'vitest'
+﻿import { describe, it, expect, vi, afterEach } from 'vitest'
 import { unlinkSync, existsSync } from 'fs'
 import { resolveStorage } from '../src/adapters/shared'
 import { MemoryStorage } from '../src/storage/MemoryStorage'
@@ -30,7 +30,7 @@ describe('resolveStorage', () => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const s = resolveStorage({ storage: 'file' }) as any
     expect(s).toBeInstanceOf(FileStorage)
-    expect(s.path).toBe('./llm-cache.json')
+    expect(s.path).toBe('./llm-cacher.json')
   })
 
   it("returns FileStorage with storagePath when provided", () => {
@@ -59,3 +59,4 @@ describe('resolveStorage', () => {
     expect(resolveStorage({ storage: custom })).toBe(custom)
   })
 })
+

@@ -1,11 +1,11 @@
-# API Reference
+﻿# API Reference
 
 ## `createCachedClient(client, options?)`
 
 Wraps any OpenAI-compatible client with caching via JavaScript `Proxy`. Returns a value with the same TypeScript type as the original client.
 
 ```ts
-import { createCachedClient } from 'llm-cache'
+import { createCachedClient } from 'llm-cacher'
 
 const openai = createCachedClient(new OpenAI(), { ttl: '24h' })
 ```
@@ -15,7 +15,7 @@ const openai = createCachedClient(new OpenAI(), { ttl: '24h' })
 Same as `createCachedClient` but intercepts `client.messages.create`.
 
 ```ts
-import { createCachedAnthropicClient } from 'llm-cache'
+import { createCachedAnthropicClient } from 'llm-cacher'
 
 const anthropic = createCachedAnthropicClient(new Anthropic(), { ttl: '24h' })
 ```
@@ -26,7 +26,7 @@ const anthropic = createCachedAnthropicClient(new Anthropic(), { ttl: '24h' })
 |---|---|---|---|
 | `ttl` | `string \| number` | `undefined` | Time-to-live. String: `"24h"`, `"30m"`, `"7d"`, `"500ms"`. Number: milliseconds. No TTL means entries never expire. |
 | `storage` | `'memory' \| 'file' \| 'sqlite' \| IStorage` | `'memory'` | Storage backend. `'file'` and `'sqlite'` use `storagePath` for the file location. Pass an `IStorage` instance for Redis/DynamoDB. |
-| `storagePath` | `string` | see below | Path used when `storage` is `'file'` (default `./llm-cache.json`) or `'sqlite'` (default `./llm-cache.db`). |
+| `storagePath` | `string` | see below | Path used when `storage` is `'file'` (default `./llm-cacher.json`) or `'sqlite'` (default `./llm-cacher.db`). |
 | `maxSize` | `number` | `1000` | Max entries for `'memory'` storage. Ignored for other backends. |
 | `onStorageError` | `'throw' \| 'passthrough'` | `'passthrough'` | What to do when storage read/write fails. `'passthrough'` falls through to the LLM silently. |
 | `semantic` | `SemanticOptions` | `undefined` | Enable semantic (vector) matching. |
@@ -36,7 +36,7 @@ const anthropic = createCachedAnthropicClient(new Anthropic(), { ttl: '24h' })
 | Option | Type | Default | Description |
 |---|---|---|---|
 | `embedder` | `IEmbedder` | required | The embedding model to use. |
-| `threshold` | `number` | `0.92` | Minimum cosine similarity (0–1) to count as a hit. |
+| `threshold` | `number` | `0.92` | Minimum cosine similarity (0â€“1) to count as a hit. |
 | `indexType` | `'flat' \| 'hnsw'` | `'flat'` | Search index. Use `'hnsw'` for 10k+ entries. |
 
 ## Storage classes
@@ -66,7 +66,7 @@ new RedisStorage({ client?: Redis, url?: string, options?: RedisOptions, keyPref
 
 | Option | Default | Description |
 |---|---|---|
-| `keyPrefix` | `'llm-cache:'` | Prefix applied to every Redis key. |
+| `keyPrefix` | `'llm-cacher:'` | Prefix applied to every Redis key. |
 
 ### `SQLiteStorage`
 
@@ -76,7 +76,7 @@ new SQLiteStorage({ path?: string, db?: Database, tableName?: string })
 
 | Option | Default | Description |
 |---|---|---|
-| `path` | `'llm-cache.db'` | Path to the SQLite file. |
+| `path` | `'llm-cacher.db'` | Path to the SQLite file. |
 | `tableName` | `'llm_cache'` | Table name used inside the database. |
 
 ### `DynamoDBStorage`
@@ -156,3 +156,5 @@ interface IEmbedder {
   embed(text: string): Promise<number[]>
 }
 ```
+
+

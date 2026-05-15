@@ -1,4 +1,4 @@
-# llm-cache
+ llm-cacher
 
 Cache LLM responses with **exact** and **semantic** matching. Works with OpenAI, Anthropic, and any SDK that follows a similar API shape. Supports in-memory, file, Redis, SQLite, and DynamoDB storage backends.
 
@@ -23,7 +23,7 @@ Cache LLM responses with **exact** and **semantic** matching. Works with OpenAI,
 ## Installation
 
 ```bash
-npm install llm-cache
+npm install llm-cacher
 ```
 
 Install the storage backend you need (all are optional peer dependencies):
@@ -53,7 +53,7 @@ npm install openai hnswlib-node
 
 ```ts
 import OpenAI from 'openai'
-import { createCachedClient } from 'llm-cache'
+import { createCachedClient } from 'llm-cacher'
 
 const openai = createCachedClient(new OpenAI(), {
   ttl: '24h',
@@ -77,7 +77,7 @@ const res2 = await openai.chat.completions.create({
 
 ```ts
 import Anthropic from '@anthropic-ai/sdk'
-import { createCachedAnthropicClient } from 'llm-cache'
+import { createCachedAnthropicClient } from 'llm-cacher'
 
 const anthropic = createCachedAnthropicClient(new Anthropic(), {
   ttl: '12h',
@@ -99,7 +99,7 @@ Requests are cached by a **SHA-256 hash** of the request parameters (model, mess
 
 - **Cache hit**: the response is returned immediately without calling the LLM API.
 - **Cache miss**: the request goes to the API, the response is stored, then returned.
-- **Streaming**: chunks are accumulated, stored as a list, and replayed as an `AsyncGenerator` on subsequent calls — the caller's code doesn't need to change.
+- **Streaming**: chunks are accumulated, stored as a list, and replayed as an `AsyncGenerator` on subsequent calls â€” the caller's code doesn't need to change.
 
 ---
 
@@ -120,14 +120,14 @@ createCachedClient(client, {
 ```ts
 createCachedClient(client, {
   storage: 'file',
-  storagePath: './llm-cache.json',
+  storagePath: './llm-cacher.json',
 })
 ```
 
 ### Redis
 
 ```ts
-import { RedisStorage } from 'llm-cache'
+import { RedisStorage } from 'llm-cacher'
 import Redis from 'ioredis'
 
 createCachedClient(client, {
@@ -138,10 +138,10 @@ createCachedClient(client, {
 ### SQLite (great for single-process apps and scripts)
 
 ```ts
-import { SQLiteStorage } from 'llm-cache'
+import { SQLiteStorage } from 'llm-cacher'
 
 createCachedClient(client, {
-  storage: new SQLiteStorage({ path: './llm-cache.db' }),
+  storage: new SQLiteStorage({ path: './llm-cacher.db' }),
   ttl: '7d',
 })
 ```
@@ -149,7 +149,7 @@ createCachedClient(client, {
 ### DynamoDB
 
 ```ts
-import { DynamoDBStorage } from 'llm-cache'
+import { DynamoDBStorage } from 'llm-cacher'
 
 createCachedClient(client, {
   storage: new DynamoDBStorage({
@@ -194,13 +194,13 @@ Semantic caching matches **similar** prompts, not just identical ones. "What is 
 ### Using a local model (no API key)
 
 ```ts
-import { LocalEmbedder } from 'llm-cache'
+import { LocalEmbedder } from 'llm-cacher'
 
 createCachedClient(client, {
   storage: 'sqlite',
   semantic: {
     embedder: new LocalEmbedder(), // downloads ~22MB model on first use
-    threshold: 0.92,               // cosine similarity 0–1, higher = stricter
+    threshold: 0.92,               // cosine similarity 0â€“1, higher = stricter
   },
 })
 ```
@@ -210,7 +210,7 @@ createCachedClient(client, {
 ```ts
 import OpenAI from 'openai'
 import Redis from 'ioredis'
-import { OpenAIEmbedder, RedisStorage } from 'llm-cache'
+import { OpenAIEmbedder, RedisStorage } from 'llm-cacher'
 
 createCachedClient(client, {
   storage: new RedisStorage({ client: new Redis() }),
@@ -233,7 +233,7 @@ createCachedClient(client, {
 ```ts
 import express from 'express'
 import OpenAI from 'openai'
-import { llmCacheMiddleware } from 'llm-cache/express'
+import { llmCacheMiddleware } from 'llm-cacher/express'
 
 const app = express()
 app.use(llmCacheMiddleware({ ttl: '24h', storage: 'memory' }))
@@ -253,7 +253,7 @@ app.post('/chat', async (req, res) => {
 ```ts
 import { Hono } from 'hono'
 import OpenAI from 'openai'
-import { llmCacheMiddleware } from 'llm-cache/hono'
+import { llmCacheMiddleware } from 'llm-cacher/hono'
 
 const app = new Hono()
 app.use(llmCacheMiddleware({ ttl: '24h', storage: 'sqlite' }))
@@ -274,8 +274,8 @@ app.post('/chat', async (c) => {
 // app.module.ts
 import { Module } from '@nestjs/common'
 import Redis from 'ioredis'
-import { LlmCacheModule } from 'llm-cache/nestjs'
-import { RedisStorage } from 'llm-cache'
+import { LlmCacheModule } from 'llm-cacher/nestjs'
+import { RedisStorage } from 'llm-cacher'
 
 @Module({
   imports: [
@@ -293,7 +293,7 @@ export class AppModule {}
 // chat.service.ts
 import { Injectable } from '@nestjs/common'
 import OpenAI from 'openai'
-import { LlmCacheService, InjectLlmCache } from 'llm-cache/nestjs'
+import { LlmCacheService, InjectLlmCache } from 'llm-cacher/nestjs'
 
 @Injectable()
 export class ChatService {
@@ -316,7 +316,7 @@ export class ChatService {
 The CLI lets you inspect and manage cache files without writing code.
 
 ```bash
-npx llm-cache --help
+npx llm-cacher --help
 ```
 
 ```
@@ -327,7 +327,7 @@ Commands:
 
 Options:
   --storage  Storage type: file | sqlite (default: sqlite)
-  --path     Path to cache file (default: ./llm-cache.db or ./llm-cache.json)
+  --path     Path to cache file (default: ./llm-cacher.db or ./llm-cacher.json)
   --limit    Max entries to list (default: 20)
 ```
 
@@ -335,13 +335,13 @@ Options:
 
 ```bash
 # SQLite stats
-npx llm-cache stats --storage sqlite --path ./llm-cache.db
+npx llm-cacher stats --storage sqlite --path ./llm-cacher.db
 
 # List entries in a JSON cache
-npx llm-cache list --storage file --path ./llm-cache.json --limit 10
+npx llm-cacher list --storage file --path ./llm-cacher.json --limit 10
 
 # Clear SQLite cache
-npx llm-cache clear --storage sqlite --path ./llm-cache.db
+npx llm-cacher clear --storage sqlite --path ./llm-cacher.db
 ```
 
 ---
@@ -352,10 +352,10 @@ Runnable examples are in the [`examples/`](examples/) folder. Requires `OPENAI_A
 
 | File | What it shows |
 |---|---|
-| [`basic.ts`](examples/basic.ts) | Memory cache — first call vs cached call, timing comparison |
+| [`basic.ts`](examples/basic.ts) | Memory cache â€” first call vs cached call, timing comparison |
 | [`streaming.ts`](examples/streaming.ts) | Streaming request on first call, chunk replay from cache on second |
 | [`with-redis.ts`](examples/with-redis.ts) | Redis storage with `onStorageError: 'passthrough'` |
-| [`semantic.ts`](examples/semantic.ts) | Local embedder — different phrasings hit the same cache entry |
+| [`semantic.ts`](examples/semantic.ts) | Local embedder â€” different phrasings hit the same cache entry |
 
 ```bash
 npx tsx examples/basic.ts
@@ -382,7 +382,7 @@ Same as above but for Anthropic's `messages.create`.
 |---|---|---|---|
 | `ttl` | `string \| number` | `undefined` | Time-to-live. String: `"24h"`, `"30m"`, `"7d"`, `"500ms"`. Number: milliseconds. |
 | `storage` | `'memory' \| 'file' \| 'sqlite' \| IStorage` | `'memory'` | Storage backend. Pass an `IStorage` instance for Redis/DynamoDB. |
-| `storagePath` | `string` | see below | File path for `'file'` (default `./llm-cache.json`) or `'sqlite'` (default `./llm-cache.db`). |
+| `storagePath` | `string` | see below | File path for `'file'` (default `./llm-cacher.json`) or `'sqlite'` (default `./llm-cacher.db`). |
 | `maxSize` | `number` | `1000` | Max entries for `'memory'` storage. |
 | `onStorageError` | `'throw' \| 'passthrough'` | `'passthrough'` | Behaviour when storage read/write fails. |
 | `semantic` | `SemanticOptions` | `undefined` | Enable semantic matching. |
@@ -392,7 +392,7 @@ Same as above but for Anthropic's `messages.create`.
 | Option | Type | Default | Description |
 |---|---|---|---|
 | `embedder` | `IEmbedder` | required | Embedding model to use. |
-| `threshold` | `number` | `0.92` | Minimum cosine similarity (0–1) to count as a cache hit. |
+| `threshold` | `number` | `0.92` | Minimum cosine similarity (0â€“1) to count as a cache hit. |
 | `indexType` | `'flat' \| 'hnsw'` | `'flat'` | Search index. Use `'hnsw'` for large caches (10k+ entries). |
 
 ### Storage classes
@@ -440,7 +440,7 @@ A numeric value is treated as milliseconds.
 Implement `IStorage` to plug in any backend:
 
 ```ts
-import type { IStorage, CacheEntry } from 'llm-cache'
+import type { IStorage, CacheEntry } from 'llm-cacher'
 
 class MyStorage implements IStorage {
   async get(key: string): Promise<CacheEntry | null> { ... }
@@ -457,3 +457,4 @@ createCachedClient(client, { storage: new MyStorage() })
 ## License
 
 MIT
+

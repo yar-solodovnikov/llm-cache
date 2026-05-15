@@ -1,8 +1,8 @@
-/**
+﻿/**
  * Streaming example: chunks are accumulated on first call and replayed from cache
  *
  * Run: npx tsx examples/streaming.ts
- * In your own project import from 'llm-cache' instead of '../src/index'
+ * In your own project import from 'llm-cacher' instead of '../src/index'
  */
 import OpenAI from 'openai'
 import { createCachedClient } from '../src/index'
@@ -36,3 +36,4 @@ async function main() {
 }
 
 main().catch(console.error)
+

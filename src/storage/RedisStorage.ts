@@ -9,7 +9,7 @@ export interface RedisStorageOptions {
   keyPrefix?: string
 }
 
-const DEFAULT_KEY_PREFIX = 'llm-cache:'
+const DEFAULT_KEY_PREFIX = 'llm-cacher:'
 const REDIS_SCAN_COUNT = 100
 const REDIS_PX_FLAG = 'PX'
 const REDIS_INITIAL_CURSOR = '0'

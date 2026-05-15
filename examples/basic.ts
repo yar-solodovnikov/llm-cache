@@ -1,8 +1,8 @@
-/**
+﻿/**
  * Basic example: OpenAI + in-memory cache
  *
  * Run: npx tsx examples/basic.ts
- * In your own project import from 'llm-cache' instead of '../src/index'
+ * In your own project import from 'llm-cacher' instead of '../src/index'
  */
 import OpenAI from 'openai'
 import { createCachedClient } from '../src/index'
@@ -32,3 +32,4 @@ async function main() {
 }
 
 main().catch(console.error)
+

@@ -1,12 +1,12 @@
 {
-  "name": "llm-cache",
+  "name": "llm-cacher",
   "version": "1.0.0",
   "description": "Cache LLM responses — exact and semantic matching",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "bin": {
-    "llm-cache": "./dist/cli.cjs"
+    "llm-cacher": "./dist/cli.cjs"
   },
   "exports": {
     ".": {

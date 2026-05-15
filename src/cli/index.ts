@@ -39,7 +39,7 @@ function parseArgs(args: string[]): Record<string, string> {
 
 function printHelp(): void {
   console.log(`
-llm-cache CLI
+llm-cacher CLI
 
 Commands:
   stats   Show cache statistics
@@ -48,13 +48,13 @@ Commands:
 
 Options:
   --storage  Storage type: file | sqlite (default: sqlite)
-  --path     Path to cache file (default: ./llm-cache.db or ./llm-cache.json)
+  --path     Path to cache file (default: ./llm-cacher.db or ./llm-cacher.json)
   --limit    Max entries to list (default: 20)
 
 Examples:
-  llm-cache stats --storage sqlite --path ./cache.db
-  llm-cache list  --storage file   --path ./cache.json --limit 10
-  llm-cache clear --storage sqlite --path ./cache.db
+  llm-cacher stats --storage sqlite --path ./cache.db
+  llm-cacher list  --storage file   --path ./cache.json --limit 10
+  llm-cacher clear --storage sqlite --path ./cache.db
   `)
 }
 
@@ -166,7 +166,7 @@ async function main() {
     return
   }
 
-  console.error(`Unknown command: "${command}". Run llm-cache --help for usage.`)
+  console.error(`Unknown command: "${command}". Run llm-cacher --help for usage.`)
   process.exit(1)
 }
 

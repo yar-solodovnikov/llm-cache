@@ -1,9 +1,9 @@
-/**
+﻿/**
  * Production example: OpenAI + Redis
  *
  * Requires Redis running on localhost:6379
  * Run: npx tsx examples/with-redis.ts
- * In your own project import from 'llm-cache' instead of '../src/index'
+ * In your own project import from 'llm-cacher' instead of '../src/index'
  */
 import OpenAI from 'openai'
 import Redis from 'ioredis'
@@ -14,7 +14,7 @@ const redis = new Redis()
 const openai = createCachedClient(new OpenAI(), {
   ttl: '24h',
   storage: new RedisStorage({ client: redis, keyPrefix: 'example:' }),
-  onStorageError: 'passthrough', // if Redis is down — fall through to the API
+  onStorageError: 'passthrough', // if Redis is down â€” fall through to the API
 })
 
 async function main() {
@@ -39,3 +39,4 @@ async function main() {
 }
 
 main().catch(console.error)
+

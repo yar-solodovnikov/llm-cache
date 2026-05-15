@@ -1,8 +1,8 @@
----
+﻿---
 layout: home
 
 hero:
-  name: llm-cache
+  name: llm-cacher
   text: Cache LLM responses
   tagline: Exact and semantic matching for OpenAI, Anthropic, and more. Cut costs, reduce latency.
   actions:
@@ -17,22 +17,23 @@ hero:
       link: https://github.com/yar-solodovnikov/llm-cache
 
 features:
-  - icon: ⚡️
+  - icon: âš¡ï¸
     title: Exact match
     details: SHA-256 hashes every request. Identical calls are served instantly from cache with zero API calls.
-  - icon: 🧠
+  - icon: ðŸ§ 
     title: Semantic match
     details: Embed prompts and find similar cached responses using cosine similarity or HNSW. "What is 2+2?" and "What does 2 plus 2 equal?" share the same cache entry.
-  - icon: 🗄️
+  - icon: ðŸ—„ï¸
     title: Five storage backends
-    details: Memory, file, Redis, SQLite, DynamoDB — pick what fits your infrastructure. All are optional peer dependencies.
-  - icon: 🔌
+    details: Memory, file, Redis, SQLite, DynamoDB â€” pick what fits your infrastructure. All are optional peer dependencies.
+  - icon: ðŸ”Œ
     title: Framework integrations
     details: Drop-in middleware for Express and Hono. NestJS module with dependency injection. Works out of the box.
-  - icon: 📦
+  - icon: ðŸ“¦
     title: Transparent proxy
     details: Wrap your existing client with one line of code. No interface changes, full TypeScript types preserved.
-  - icon: 🌊
+  - icon: ðŸŒŠ
     title: Streaming support
     details: Accumulates stream chunks, stores them, and replays as AsyncGenerator. Your streaming code doesn't change.
 ---
+

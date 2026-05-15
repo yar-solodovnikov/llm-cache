@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest'
+﻿import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { DynamoDBStorage } from '../src/storage/DynamoDBStorage'
 import type { CacheEntry } from '../src/storage/IStorage'
 
@@ -64,7 +64,7 @@ describe('DynamoDBStorage', () => {
   beforeEach(() => {
     client = makeDynamoClient()
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    storage = new DynamoDBStorage({ tableName: 'llm-cache', client: client as any })
+    storage = new DynamoDBStorage({ tableName: 'llm-cacher', client: client as any })
   })
 
   it('stores and retrieves an entry', async () => {
@@ -110,3 +110,4 @@ describe('DynamoDBStorage', () => {
     expect(await storage.get('b')).toBeNull()
   })
 })
+

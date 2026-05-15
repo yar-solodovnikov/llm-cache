@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest'
+﻿import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { RedisStorage } from '../src/storage/RedisStorage'
 import type { CacheEntry } from '../src/storage/IStorage'
 
@@ -56,7 +56,7 @@ describe('RedisStorage', () => {
     const entry = makeEntry('k1', { expiresAt: Date.now() + 60_000 })
     await storage.set('k1', entry)
     expect(client.set).toHaveBeenCalledWith(
-      'llm-cache:k1',
+      'llm-cacher:k1',
       expect.any(String),
       'PX',
       expect.any(Number),
@@ -66,7 +66,7 @@ describe('RedisStorage', () => {
   it('stores without TTL when expiresAt is null', async () => {
     const entry = makeEntry('k1', { expiresAt: null })
     await storage.set('k1', entry)
-    expect(client.set).toHaveBeenCalledWith('llm-cache:k1', expect.any(String))
+    expect(client.set).toHaveBeenCalledWith('llm-cacher:k1', expect.any(String))
   })
 
   it('deletes an entry', async () => {
@@ -88,3 +88,4 @@ describe('RedisStorage', () => {
     expect(client.set).toHaveBeenCalledWith('my-app:k1', expect.any(String))
   })
 })
+

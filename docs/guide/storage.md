@@ -1,10 +1,10 @@
-# Storage Backends
+﻿# Storage Backends
 
 All storage backends implement the same `IStorage` interface, so you can swap them without touching the rest of your code.
 
 ## Memory
 
-Built-in, no extra packages needed. Uses an LRU Map — oldest entries are evicted when `maxSize` is reached. A background sweep runs every 60 s to clean expired entries.
+Built-in, no extra packages needed. Uses an LRU Map â€” oldest entries are evicted when `maxSize` is reached. A background sweep runs every 60 s to clean expired entries.
 
 ```ts
 createCachedClient(client, {
@@ -16,7 +16,7 @@ createCachedClient(client, {
 To configure `sweepIntervalMs`, instantiate directly:
 
 ```ts
-import { MemoryStorage } from 'llm-cache'
+import { MemoryStorage } from 'llm-cacher'
 
 createCachedClient(client, {
   storage: new MemoryStorage({ maxSize: 500, sweepIntervalMs: 30_000 }),
@@ -27,18 +27,18 @@ Best for: development, testing, single-process apps where persistence isn't need
 
 ## File
 
-Stores entries as a JSON file. Reads and writes on every access — not suitable for high throughput, but great for CLI tools and local scripts.
+Stores entries as a JSON file. Reads and writes on every access â€” not suitable for high throughput, but great for CLI tools and local scripts.
 
 ```ts
 createCachedClient(client, {
   storage: 'file',
-  storagePath: './llm-cache.json',
+  storagePath: './llm-cacher.json',
 })
 ```
 
 Best for: scripts, CLI tools, one-off jobs.
 
-> **Note:** FileStorage is designed for single-process use. Concurrent writes from multiple processes are not safe — the last write wins and may overwrite changes from another process. Use SQLite or Redis for multi-process environments.
+> **Note:** FileStorage is designed for single-process use. Concurrent writes from multiple processes are not safe â€” the last write wins and may overwrite changes from another process. Use SQLite or Redis for multi-process environments.
 
 ## Redis
 
@@ -47,13 +47,13 @@ npm install ioredis
 ```
 
 ```ts
-import { RedisStorage } from 'llm-cache'
+import { RedisStorage } from 'llm-cacher'
 import Redis from 'ioredis'
 
 createCachedClient(client, {
   storage: new RedisStorage({
     client: new Redis(),     // existing ioredis client
-    keyPrefix: 'llm:',       // default: 'llm-cache:'
+    keyPrefix: 'llm:',       // default: 'llm-cacher:'
   }),
   ttl: '24h',
 })
@@ -65,7 +65,7 @@ Or connect by URL:
 new RedisStorage({ url: 'redis://localhost:6379' })
 ```
 
-TTL is set natively via Redis `PX` — no background sweep needed. `clear()` uses `SCAN` internally so it does not block the Redis event loop regardless of dataset size.
+TTL is set natively via Redis `PX` â€” no background sweep needed. `clear()` uses `SCAN` internally so it does not block the Redis event loop regardless of dataset size.
 
 Best for: multi-process apps, horizontal scaling, high-throughput services.
 
@@ -76,10 +76,10 @@ npm install better-sqlite3
 ```
 
 ```ts
-import { SQLiteStorage } from 'llm-cache'
+import { SQLiteStorage } from 'llm-cacher'
 
 createCachedClient(client, {
-  storage: new SQLiteStorage({ path: './llm-cache.db' }),
+  storage: new SQLiteStorage({ path: './llm-cacher.db' }),
   ttl: '7d',
 })
 ```
@@ -100,7 +100,7 @@ npm install @aws-sdk/client-dynamodb
 ```
 
 ```ts
-import { DynamoDBStorage } from 'llm-cache'
+import { DynamoDBStorage } from 'llm-cacher'
 
 createCachedClient(client, {
   storage: new DynamoDBStorage({
@@ -142,7 +142,7 @@ createCachedClient(client, {
 Implement `IStorage` to plug in any backend:
 
 ```ts
-import type { IStorage, CacheEntry } from 'llm-cache'
+import type { IStorage, CacheEntry } from 'llm-cacher'
 
 class MyStorage implements IStorage {
   async get(key: string): Promise<CacheEntry | null> { ... }
@@ -153,3 +153,4 @@ class MyStorage implements IStorage {
 
 createCachedClient(client, { storage: new MyStorage() })
 ```
+
