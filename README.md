@@ -107,7 +107,7 @@ Requests are cached by a **SHA-256 hash** of the request parameters (model, mess
 
 - **Cache hit**: the response is returned immediately without calling the LLM API.
 - **Cache miss**: the request goes to the API, the response is stored, then returned.
-- **Streaming**: chunks are accumulated, stored as a list, and replayed as an `AsyncGenerator` on subsequent calls — the caller's code doesn't need to change.
+- **Streaming**: chunks are accumulated, stored as a list, and replayed as an `AsyncGenerator` on subsequent calls — the caller's code doesn't need to change.
 
 ---
 
@@ -360,10 +360,10 @@ Runnable examples are in the [`examples/`](examples/) folder. Requires `OPENAI_A
 
 | File | What it shows |
 |---|---|
-| [`basic.ts`](examples/basic.ts) | Memory cache — first call vs cached call, timing comparison |
+| [`basic.ts`](examples/basic.ts) | Memory cache — first call vs cached call, timing comparison |
 | [`streaming.ts`](examples/streaming.ts) | Streaming request on first call, chunk replay from cache on second |
 | [`with-redis.ts`](examples/with-redis.ts) | Redis storage with `onStorageError: 'passthrough'` |
-| [`semantic.ts`](examples/semantic.ts) | Local embedder — different phrasings hit the same cache entry |
+| [`semantic.ts`](examples/semantic.ts) | Local embedder — different phrasings hit the same cache entry |
 
 ```bash
 npx tsx examples/basic.ts
