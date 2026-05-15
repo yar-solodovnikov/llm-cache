@@ -1,6 +1,6 @@
 {
   "name": "llm-cacher",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Cache LLM responses — exact and semantic matching",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
@@ -44,14 +44,28 @@
     "docs:preview": "vitepress preview docs"
   },
   "keywords": [
-    "llm", "cache", "caching",
-    "openai", "anthropic", "claude", "gpt",
-    "ai", "ai-cache", "llm-cache",
-    "semantic-cache", "semantic-search",
-    "embeddings", "vector-cache",
-    "prompt-caching", "response-cache",
-    "redis", "sqlite", "dynamodb",
-    "middleware", "typescript", "nodejs",
+    "llm",
+    "cache",
+    "caching",
+    "openai",
+    "anthropic",
+    "claude",
+    "gpt",
+    "ai",
+    "ai-cache",
+    "llm-cache",
+    "semantic-cache",
+    "semantic-search",
+    "embeddings",
+    "vector-cache",
+    "prompt-caching",
+    "response-cache",
+    "redis",
+    "sqlite",
+    "dynamodb",
+    "middleware",
+    "typescript",
+    "nodejs",
     "cost-optimization"
   ],
   "type": "module",
@@ -59,7 +73,7 @@
   "author": "Yaroslav Solodovnikov",
   "repository": {
     "type": "git",
-    "url": "https://github.com/yar-solodovnikov/llm-cacher.git"
+    "url": "git+https://github.com/yar-solodovnikov/llm-cacher.git"
   },
   "homepage": "https://yar-solodovnikov.github.io/llm-cacher/",
   "engines": {
