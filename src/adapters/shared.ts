@@ -25,11 +25,11 @@ export function buildManager(options: LlmCacheOptions): CacheManager {
   })
 }
 
-export async function* replayStream(chunks: unknown[]): AsyncGenerator<unknown> {
+async function* replayStream(chunks: unknown[]): AsyncGenerator<unknown> {
   for (const chunk of chunks) yield chunk
 }
 
-export function extractText(params: Record<string, unknown>): string | undefined {
+function extractText(params: Record<string, unknown>): string | undefined {
   const messages = params.messages as { role: string; content: unknown }[] | undefined
   if (!messages?.length) return undefined
   // non-string content (vision, tool results) → skip semantic indexing
