@@ -66,12 +66,10 @@ export class DynamoDBStorage implements IStorage {
     const item = result.Item
     if (!item || !item[this.valueAttr]?.S) return null
 
-    // DynamoDB TTL cleanup is eventual — do a client-side check too
-    const ttlN = item[this.ttlAttr]?.N
-    const ttl = ttlN ? Number(ttlN) * MS_PER_SECOND : null
-    if (ttl !== null && Date.now() > ttl) return null
-
     const entry = JSON.parse(item[this.valueAttr].S!) as CacheEntry
+    // DynamoDB TTL cleanup is eventual — check against millisecond-precise expiresAt
+    // (the ttl attribute is seconds-rounded, so it can expire entries up to 999ms early)
+    if (entry.expiresAt !== null && Date.now() > entry.expiresAt) return null
     if (entry.type !== ENTRY_TYPE_FULL && entry.type !== ENTRY_TYPE_STREAM) return null
     return entry
   }

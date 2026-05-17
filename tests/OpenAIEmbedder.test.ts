@@ -53,4 +53,15 @@ describe('OpenAIEmbedder', () => {
     const embedder = new OpenAIEmbedder({ client: badClient })
     await expect(embedder.embed('empty')).rejects.toThrow('no data')
   })
+
+  it('throws a controlled error when the API response has no data property at all', async () => {
+    const badClient = {
+      embeddings: {
+        create: vi.fn().mockResolvedValue({}),
+      },
+    }
+    const embedder = new OpenAIEmbedder({ client: badClient })
+    // Without optional chaining, response.data[0] would throw a raw TypeError
+    await expect(embedder.embed('test')).rejects.toThrow('no data')
+  })
 })

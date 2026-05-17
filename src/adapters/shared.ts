@@ -32,8 +32,8 @@ async function* replayStream(chunks: unknown[]): AsyncGenerator<unknown> {
 function extractText(params: Record<string, unknown>): string | undefined {
   const messages = params.messages
   if (!Array.isArray(messages) || messages.length === 0) return undefined
-  // non-string content (vision, tool results) → skip semantic indexing
-  if ((messages as { role: string; content: unknown }[]).some(m => typeof m.content !== 'string')) return undefined
+  // null/non-object items or non-string content (vision, tool results) → skip semantic indexing
+  if ((messages as unknown[]).some(m => m == null || typeof (m as { content: unknown }).content !== 'string')) return undefined
   return (messages as { role: string; content: string }[]).map(m => `${m.role}: ${m.content}`).join('\n')
 }
 

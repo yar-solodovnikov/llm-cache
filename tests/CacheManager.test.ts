@@ -51,6 +51,22 @@ describe('CacheManager', () => {
     await expect(manager.get('k')).rejects.toThrow('storage down')
   })
 
+  it('throws on TTL = 0 (would silently produce instant-expiry cache)', () => {
+    expect(() => new CacheManager({ storage: new MemoryStorage(), ttl: 0 })).toThrow('positive')
+  })
+
+  it('throws on negative TTL', () => {
+    expect(() => new CacheManager({ storage: new MemoryStorage(), ttl: -1000 })).toThrow('positive')
+  })
+
+  it('throws on NaN TTL (would silently disable expiry)', () => {
+    expect(() => new CacheManager({ storage: new MemoryStorage(), ttl: NaN })).toThrow('positive')
+  })
+
+  it('throws on TTL string "0ms"', () => {
+    expect(() => new CacheManager({ storage: new MemoryStorage(), ttl: '0ms' })).toThrow('positive')
+  })
+
   it('parses string TTL formats correctly', async () => {
     vi.useFakeTimers()
     const storage = new MemoryStorage({ sweepIntervalMs: 999_999 })

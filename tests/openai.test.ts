@@ -128,6 +128,16 @@ describe('createCachedClient — extractText edge cases', () => {
     expect(result).toEqual(RESPONSE)
   })
 
+  it('does not throw when a message item is null', async () => {
+    const create = vi.fn().mockResolvedValue(RESPONSE)
+    const cached = createCachedClient(makeClient(create))
+    const result = await cached.chat.completions.create({
+      model: 'gpt-4o',
+      messages: [null] as unknown as [],
+    })
+    expect(result).toEqual(RESPONSE)
+  })
+
   it('does not throw when messages contains non-string content', async () => {
     const create = vi.fn().mockResolvedValue(RESPONSE)
     const cached = createCachedClient(makeClient(create))

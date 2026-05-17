@@ -96,6 +96,27 @@ describe('DynamoDBStorage', () => {
     expect(await storage.get('k1')).toBeNull()
   })
 
+  it('does not expire an entry that is still valid — millisecond precision (not seconds)', async () => {
+    vi.useFakeTimers()
+    // Place "now" mid-second so Math.floor(now/1000)*1000 < now
+    const now = 1_000_500
+    vi.setSystemTime(now)
+
+    // Entry expires 999ms from now — still within the same calendar second
+    const entry = makeEntry('k1', { expiresAt: now + 999 })
+    await storage.set('k1', entry)
+
+    // 998ms later — entry must still be valid
+    vi.advanceTimersByTime(998)
+    expect(await storage.get('k1')).not.toBeNull()
+
+    // 2ms more (total 1000ms, now past expiresAt) — must be expired
+    vi.advanceTimersByTime(2)
+    expect(await storage.get('k1')).toBeNull()
+
+    vi.useRealTimers()
+  })
+
   it('deletes an entry', async () => {
     await storage.set('k1', makeEntry('k1'))
     await storage.delete('k1')
