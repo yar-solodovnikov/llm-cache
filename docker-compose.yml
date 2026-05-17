@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  redis:
+    image: redis:7-alpine
+    ports:
+      - '6379:6379'
+    healthcheck:
+      test: ['CMD', 'redis-cli', 'ping']
+      interval: 1s
+      timeout: 3s
+      retries: 15
+
+  localstack:
+    image: localstack/localstack:3
+    ports:
+      - '4566:4566'
+    environment:
+      SERVICES: dynamodb
+      DEFAULT_REGION: us-east-1
+    healthcheck:
+      test: ['CMD', 'curl', '-f', 'http://localhost:4566/_localstack/health']
+      interval: 2s
+      timeout: 5s
+      retries: 20

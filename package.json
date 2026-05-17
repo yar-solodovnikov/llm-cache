@@ -38,6 +38,7 @@
     "dev": "tsup --watch",
     "test": "vitest run",
     "test:watch": "vitest",
+    "test:integration": "vitest run --config vitest.integration.config.ts",
     "lint": "eslint src tests",
     "docs:dev": "vitepress dev docs",
     "docs:build": "vitepress build docs",

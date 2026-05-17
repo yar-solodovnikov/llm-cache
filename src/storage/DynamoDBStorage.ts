@@ -107,7 +107,7 @@ export class DynamoDBStorage implements IStorage {
       const result: any = await this.client.send(new this.cmds.ScanCommand({
         TableName: this.table,
         ProjectionExpression: DYNAMO_KEY_ALIAS,
-        ExpressionAttributeNames: { DYNAMO_KEY_ALIAS: this.keyAttr },
+        ExpressionAttributeNames: { [DYNAMO_KEY_ALIAS]: this.keyAttr },
         ExclusiveStartKey: lastKey,
       }))
 
