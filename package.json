@@ -102,7 +102,7 @@
     "typescript": "^5.0.0",
     "typescript-eslint": "^8.0.0",
     "vitepress": "^1.6.4",
-    "vitest": "^2.0.0"
+    "vitest": "^3.2.4"
   },
   "peerDependencies": {
     "@anthropic-ai/sdk": ">=0.20.0",
@@ -147,5 +147,8 @@
     "hono": {
       "optional": true
     }
+  },
+  "overrides": {
+    "esbuild": "^0.25.0"
   }
 }
